@@ -11,37 +11,73 @@ import (
 var OutOfBoundsError = errors.New("out of bounds error")
 var InvalidInputError = errors.New("invalid input error")
 
-//Returns number of houses visited and any errors
-func PizzaDelivery(input string) (uint64, error) {
-	//Instantiate variables
-	var err error
+func DeliveryRouter(deliverers int, input string) (uint64, error) {
 	var res uint64
+	var err error
+	m := make(map[schemes.Address]uint64)
+	for i := 0; i < deliverers; i += 1 {
+		var s string = ""
+		for j, c := range input {
+			if j % deliverers == i {
+				s = fmt.Sprintf("%s%s", s, string(c))
+			}
+		}
+		_, err = PizzaDelivery(s, m)
+		if err != nil {
+			res = uint64(len(m))
+			return res, err
+		}
+	}
+	res = uint64(len(m))
+	return res, err
+}
+
+//Returns number of houses visited and any errors
+func PizzaDelivery(input string, m map[schemes.Address]uint64) (uint64, error) {
+	//Instantiate variables
+	var res uint64
+	var err error
 	var x uint64 = uint64(math.Exp2(63))
 	var y uint64 = uint64(math.Exp2(63))
-	m := make(map[schemes.Address]uint64)
 	m[schemes.Address{X: x, Y: y}] += 1
 
 	//Iterate through input
 	for i, c := range input {
 		//Validate each character
+		//If out of bounds, return OutOfBoundsError
 		switch string(c) {
-		case "^":
-			y += 1
-		case "<":
-			x -= 1
 		case ">":
+			if x == uint64(math.Exp2(64))-1 {
+				res = uint64(len(m))
+				err = fmt.Errorf("%w at index %d", OutOfBoundsError, i)
+				return res, err
+			}
 			x += 1
+		case "<":
+			if x == 0 {
+				res = uint64(len(m))
+				err = fmt.Errorf("%w at index %d", OutOfBoundsError, i)
+				return res, err
+			}
+			x -= 1
+		case "^":
+			if x == uint64(math.Exp2(64))-1 {
+				res = uint64(len(m))
+				err = fmt.Errorf("%w at index %d", OutOfBoundsError, i)
+				return res, err
+			}
+			y += 1
 		case "v", "V":
+			if y == 0 {
+				res = uint64(len(m))
+				err = fmt.Errorf("%w at index %d", OutOfBoundsError, i)
+				return res, err
+			}
 			y -= 1
 		//If invalid input, return InvalidInputError
 		default:
 			res = uint64(len(m))
 			err = fmt.Errorf("%w at index %d", InvalidInputError, i)
-			return res, err
-		}
-		//If out of bounds, return OutOfBoundsError
-		if x == 0 || y == 0 || x == uint64(math.Exp2(64))-1 || y == uint64(math.Exp2(64))-1 {
-			err = fmt.Errorf("%w at index %d", OutOfBoundsError, i)
 			return res, err
 		}
 		//Increment number of deliveries to an address by 1 and store in the map
