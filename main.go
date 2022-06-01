@@ -7,7 +7,11 @@ import (
 )
 
 func main() {
-	housesVisited, err := deliver.PizzaDelivery("^^f^")
+	var input string
+	fmt.Println("Welcome to Thomas's Pizza Delivery Company!")
+	fmt.Println("Please enter the desired route")
+	fmt.Scan(&input)
+	housesVisited, err := deliver.PizzaDelivery(input)
 	if err != nil {
 		log.Println(err)
 	}

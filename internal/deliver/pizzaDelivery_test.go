@@ -8,8 +8,8 @@ import (
 
 func TestPizzaDelivery(t *testing.T) {
 	t.Run("Correct Output", func(t *testing.T) {
-		var expectedOutput uint64 = 2
-		res, err := deliver.PizzaDelivery("^v^v")
+		var expectedOutput uint64 = 6
+		res, err := deliver.PizzaDelivery("^^^^^")
 		require.NoError(t, err)
 		require.Equal(t, res, expectedOutput)
 	})
