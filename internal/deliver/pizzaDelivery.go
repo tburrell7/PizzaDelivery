@@ -14,7 +14,9 @@ var InvalidInputError = errors.New("invalid input error")
 func DeliveryRouter(deliverers int, input string) (uint64, error) {
 	var res uint64
 	var err error
+	//All deliverers are in the same neighborhood so they access the same map
 	m := make(map[schemes.Address]uint64)
+	//Parse input based on number of deliverers
 	for i := 0; i < deliverers; i += 1 {
 		var s string = ""
 		for j, c := range input {
@@ -28,6 +30,7 @@ func DeliveryRouter(deliverers int, input string) (uint64, error) {
 			return res, err
 		}
 	}
+	//Only visited addresses are added to m
 	res = uint64(len(m))
 	return res, err
 }
@@ -36,6 +39,7 @@ func DeliveryRouter(deliverers int, input string) (uint64, error) {
 func PizzaDelivery(input string, m map[schemes.Address]uint64) error {
 	//Instantiate variables
 	var err error
+					     // 2^63
 	var x uint64 = uint64(0x8000000000000000)
 	var y uint64 = uint64(0x8000000000000000)
 	m[schemes.Address{X: x, Y: y}] += 1
@@ -46,6 +50,7 @@ func PizzaDelivery(input string, m map[schemes.Address]uint64) error {
 		//If out of bounds, return OutOfBoundsError
 		switch string(c) {
 		case ">":
+			//if x == 2^64-1
 			if x == uint64(0xffffffffffffffff) {
 				err = fmt.Errorf("%w at index %d", OutOfBoundsError, i)
 				return err
@@ -58,7 +63,7 @@ func PizzaDelivery(input string, m map[schemes.Address]uint64) error {
 			}
 			x -= 1
 		case "^":
-			//if y == uint64(math.Exp2(64))-1 {
+			//if y == 2^64-1
 			if y == uint64(0xffffffffffffffff) {
 				err = fmt.Errorf("%w at index %d", OutOfBoundsError, i)
 				return err
