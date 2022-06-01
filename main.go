@@ -33,5 +33,5 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Printf("Houses Visited = %d\n", housesVisited)
+	fmt.Printf("Houses Delivered To = %d\n", housesVisited)
 }
