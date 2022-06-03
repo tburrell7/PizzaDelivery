@@ -3,8 +3,15 @@ package deliver
 import (
 	"errors"
 	"fmt"
-	"pizzaDelivery/internal/schemes"
 )
+//public for testing purposes
+type Address struct {
+	x uint64
+	y uint64
+}
+
+//ORIGIN = 2^63
+const ORIGIN = uint64(0x8000000000000000)
 
 //Types of errors
 var OutOfBoundsError = errors.New("out of bounds error")
@@ -15,34 +22,34 @@ func DeliveryRouter(deliverers int, input string) (uint64, error) {
 	var res uint64
 	var err error
 	//All deliverers are in the same neighborhood so they access the same map
-	m := make(map[schemes.Address]uint64)
+	neighborhood := make(map[Address]uint64)
 	//Parse input based on number of deliverers
-	for i := 0; i < deliverers; i += 1 {
-		var s string = ""
-		for j, c := range input {
-			if j % deliverers == i {
-				s = fmt.Sprintf("%s%s", s, string(c))
+	for deliverer := 0; deliverer < deliverers; deliverer += 1 {
+		var delRoute string = ""
+		for index, c := range input {
+			direction := string(c)
+			if index % deliverers == deliverer {
+				delRoute = fmt.Sprintf("%s%s", delRoute, direction)
 			}
 		}
-		err = PizzaDelivery(s, m)
+		err = PizzaDelivery(delRoute, neighborhood)
 		if err != nil {
-			res = uint64(len(m))
+			res = uint64(len(neighborhood))
 			return res, err
 		}
 	}
 	//Only visited addresses are added to m
-	res = uint64(len(m))
+	res = uint64(len(neighborhood))
 	return res, err
 }
 
 //Returns any errors from a deliverer
-func PizzaDelivery(input string, m map[schemes.Address]uint64) error {
+func PizzaDelivery(input string, neighborhood map[Address]uint64) error {
 	//Instantiate variables
 	var err error
-					     // 2^63
-	var x uint64 = uint64(0x8000000000000000)
-	var y uint64 = uint64(0x8000000000000000)
-	m[schemes.Address{X: x, Y: y}] += 1
+	var x uint64 = ORIGIN
+	var y uint64 = ORIGIN
+	neighborhood[Address{x, y}] += 1
 
 	//Iterate through input
 	for i, c := range input {
@@ -81,7 +88,7 @@ func PizzaDelivery(input string, m map[schemes.Address]uint64) error {
 			return err
 		}
 		//Increment number of deliveries to an address by 1 and store in the map
-		m[schemes.Address{X: x, Y: y}] += 1
+		neighborhood[Address{x, y}] += 1
 	}
 	return err
 }
