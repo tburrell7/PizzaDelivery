@@ -17,7 +17,7 @@ func main() {
 	if deliverers < 0 {
 		log.Fatal("Cannot have negative deliverers")
 	}
-	//Read from file if specified
+	// Read from file if specified
 	if len(os.Args) == 2 {
 		val, err := os.ReadFile(fmt.Sprintf("routes/%s", os.Args[1]))
 		if err != nil {
