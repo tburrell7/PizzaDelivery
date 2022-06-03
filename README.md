@@ -15,8 +15,8 @@ To use Tom's Pizza Delivery Service, you need to provide the number of deliverer
 The number of deliverers is passed through the command line and the route can be passed from the command line or as a file<br />
 
 To pass a route as a file, add it to the `routes` directory first, then call the program using the filename as a parameter<br />
-In this example `PizzaDeliveryInput.txt` is the filename
-* `go run main.go PizzaDeliveryInput.txt`<br />
+In this example `SampleRoute.txt` is the filename
+* `go run main.go SampleRoute.txt`<br />
   Welcome to Thomas's Pizza Delivery Company!<br />
   Please enter the number of deliverers<br />
   `2`<br />
