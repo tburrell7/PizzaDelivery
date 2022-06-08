@@ -4,15 +4,17 @@ import (
 	"errors"
 	"fmt"
 )
+
 // public for testing purposes
 type Address struct {
 	x uint64
 	y uint64
 }
 
-// ORIGIN = 2^63
+//ORIGIN = 2^63
 const ORIGIN = uint64(0x8000000000000000)
 const NEAREDGE = 0
+
 // FAREDGE = 2^64-1
 const FAREDGE = uint64(0xffffffffffffffff)
 
@@ -31,7 +33,7 @@ func DeliveryRouter(deliverers int, input string) (uint64, error) {
 		var delRoute string = ""
 		for index, c := range input {
 			direction := string(c)
-			if index % deliverers == deliverer {
+			if index%deliverers == deliverer {
 				delRoute = fmt.Sprintf("%s%s", delRoute, direction)
 			}
 		}

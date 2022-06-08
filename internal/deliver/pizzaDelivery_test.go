@@ -1,9 +1,9 @@
 package deliver_test
 
 import (
+	"github.com/stretchr/testify/require"
 	"pizzaDelivery/internal/deliver"
 	"testing"
-	"github.com/stretchr/testify/require"
 )
 
 func TestPizzaDelivery(t *testing.T) {
